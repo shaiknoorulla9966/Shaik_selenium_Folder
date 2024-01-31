@@ -1,0 +1,161 @@
+package webdriverExamples;
+//to access webdriver classes & methods
+import org.openqa.selenium.WebDriver;
+//to access firefox browser
+import org.openqa.selenium.firefox.FirefoxDriver;
+//to access object Ind: methods
+import org.openqa.selenium.By;
+
+public class TC001 {
+public static void main(String args[]) throws Exception{
+    //Test Steps
+System.setProperty("webdriver.gecko.driver",
+                           "F:\\Suresh_Selenium\\Drivers\\geckodriver.exe");
+WebDriver driver = new FirefoxDriver();
+driver.navigate().to("http://183.82.103.245/nareshit/login.php&quot;);
+Thread.sleep(3000); //wait for some time
+driver.close();
+}
+}
+//how to work familarly with chrome driver
+package webdriverExamples;
+//to access webdriver classes & methods
+import org.openqa.selenium.WebDriver;
+//to access firefox browser
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+//to access object Ind: methods
+import org.openqa.selenium.By;
+
+public class TC001 {
+public static void main(String args[]) throws Exception{
+    //Test Steps
+System.setProperty("webdriver.chrome.driver",
+                  "F:\\Suresh_Selenium\\Drivers\\chromedriver.exe");
+WebDriver driver = new ChromeDriver();
+driver.navigate().to("http://183.82.103.245/nareshit/login.php&quot;);
+Thread.sleep(3000); //wait for some time
+driver.close();
+}
+}
+// HOW TO TEST THE DATA 
+package webdriverExamples;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.By;
+
+public class TC_Verify {
+    //Test Data
+         //DT    Var          VV
+static String  url     = "http://183.82.103.245/nareshit/login.php&quot;;
+static String username = "nareshit";
+static String password = "nareshit";
+static String title1   = "OrangeHRM - New Level of HR Management";
+static String title2   = "OrangeHRM";
+
+public static void main(String args[]) throws Exception{
+    //Test Steps
+System.setProperty("webdriver.gecko.driver",
+        "F:\\Suresh_Selenium\\Drivers\\geckodriver.exe");
+WebDriver driver = new FirefoxDriver();
+driver.navigate().to(url);
+//Verify Page Title
+//Actual Result     compare ExpectedResult
+if(driver.getTitle().equals(title1)) {
+   System.out.println("Title matched");    
+}
+else {
+    System.out.println("Title not matched");
+    System.out.println(driver.getTitle());
+}
+/* //Test Data : hardcoded: mentioned in same step
+driver.findElement(By.name("txtUserName")).sendKeys("nareshit");
+driver.findElement(By.name("txtPassword")).sendKeys("nareshit");  */
+
+//Test Data : varible: mentioned in same step
+driver.findElement(By.name("txtUserName")).sendKeys(username);
+driver.findElement(By.name("txtPassword")).sendKeys(password);
+Thread.sleep(3000);
+
+driver.findElement(By.name("Submit")).click();
+System.out.println("Login comleted");
+Thread.sleep(4000);
+//Verify Page Title
+if(driver.getTitle().equals(title2)) {
+   System.out.println("Title matched");    
+}
+else {
+    System.out.println("Title not matched ");
+    System.out.println(driver.getTitle());
+}
+driver.findElement(By.linkText("Logout")).click();
+System.out.println("Logout completed");
+Thread.sleep(3000);
+driver.close();
+}
+}
+
+import org.openqa.selenium.WebDriver;
+
+public class Global {
+//To Provide TestData & Objects realted to whole application
+public    WebDriver driver;
+//************TestData
+//      DT    Var    VV
+public String url = "http://183.82.103.245/nareshit/login.php&quot;;
+public String un  = "nareshit";
+public String pw  = "nareshit";
+
+//************Objects / Elements
+public String txt_loginname = "txtUserName";
+public String txt_password  = "txtPassword";
+public String btn_login     = "Submit";
+public String link_logout   = "Logout";
+}
+
+--------------
+package com.hrms.lib;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class General extends Global{
+//To Provide all re-usable fun:/methods related to whole application
+public void openApplication() {
+System.setProperty("webdriver.gecko.driver", "F:\\Suresh_Selenium\\Drivers\\geckodriver.exe");
+driver = new FirefoxDriver();
+driver.navigate().to(url);
+System.out.println("Application Opened");
+}
+public void closeApplication() {
+    driver.close();
+    System.out.println("Application closed");
+}
+public void login() {
+    driver.findElement(By.name(txt_loginname)).sendKeys(un);
+    driver.findElement(By.name(txt_password)).sendKeys(pw);
+    driver.findElement(By.name(btn_login)).click();
+    System.out.println("Login completed");
+}
+public void logout() {
+    driver.findElement(By.linkText(link_logout)).click();
+    System.out.println("Logout completed");
+}
+}
+
+-----------------
+package com.hrms.testscripts;
+
+import com.hrms.lib.General;
+
+public class TC001 {
+public static void main(String args[]) {
+    //TestSteps
+   General  obj  = new General();
+   obj.openApplication();
+   obj.login();
+   obj.logout();
+   obj.closeApplication();
+}
+}
